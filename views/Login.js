@@ -1,7 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image, KeyboardAvoidingView } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View, Button, Image, KeyboardAvoidingView } from 'react-native';
+
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 
 import LoginForm from '../components/LoginForm';
+
+import SignUp from './Signup';
+import Home from './Home';
 
 const styles = {
   container: {
@@ -24,30 +29,14 @@ const styles = {
   },
 }
 
-export default class Login extends React.Component {
+
+
+class Login extends React.Component {
   static navigationOptions = {
     header: null
   }
-  constructor(props){
-    super(props);
-    this.state = {
-      isAuthenticated: false
-    };
-    this.authenticate = this.authenticate.bind(this);
-  }
 
-  //TODO: NEED POST METHOD TO AUTHENTICATE
-  authenticate() {
-    this.setState({
-      isAuthenticated: !this.state.isAuthenticated
-    })
-    console.log(this.state.isAuthenticated);
-    // TODO: FIX AUTHENTICATION ISSUE TRANSITIONING PAGES
-  }
   render() {
-    if (this.state.isAuthenticated) {
-      this.props.navigation.navigate("Home");
-    }
     return(
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <View style={styles.logoContainer}>
@@ -55,9 +44,23 @@ export default class Login extends React.Component {
           <Text style={styles.title}>An app where your wishes may come true</Text>
         </View>
         <View style={styles.formContainer}>
-          <LoginForm authenticate={this.authenticate} navigation={this.props.navigation}/>
+          <LoginForm
+            authenticate={this.authenticate}
+            navigation={this.props.navigation}/>
         </View>
       </KeyboardAvoidingView>
     );
   }
 }
+const LoginScreen = createStackNavigator({
+  Default: Login,
+  Home: {
+    screen: Home,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Signup: SignUp,
+});
+
+export default LoginScreen;

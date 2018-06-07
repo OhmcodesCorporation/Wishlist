@@ -13,17 +13,25 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%'
+  },
+  headerButtonLeft: {
+    paddingLeft: 25
   }
 }
-
+const LeftButton = (props) => {
+  return (<Icon
+    style={styles.headerButtonLeft}
+    onPress={() => props.nav.toggleDrawer()}
+    name='menu'
+    containerStyle={styles.headerButtonLeft}
+    color='white'
+    underlayColor='#3f91f5'
+  />)
+}
 export default class Wishlist extends React.Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: 'Wishlist',
-    headerLeft: (
-      <Icon onPress={() => navigation.toggleDrawer()}
-      name='menu'
-      color='white'></Icon>
-    )
+    headerLeft: <LeftButton nav={navigation}/>
   });
 
   constructor(props) {

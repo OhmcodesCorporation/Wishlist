@@ -1,5 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
+import axios from 'axios';
+import { AsyncStorage, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import EventItem from '../components/EventItem';
@@ -7,8 +8,10 @@ import EventItem from '../components/EventItem';
 const styles = {
   container: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around'
+    flexDirection: 'column',
+    padding: 10,
+    flexWrap: 'wrap',
+    justifyContent: 'space-between'
   },
   eventRow: {
     padding: 10,
@@ -16,62 +19,89 @@ const styles = {
   },
   headerButtonLeft: {
     paddingLeft: 25,
+  },
+  headerButtonRight: {
+    paddingRight: 25,
   }
 }
 
-// const DEF_DATA = {
-//   [ title: "Event 1",
-//     location: "Burnaby",
-//     date: "January 1, 2018"
-//   ],
-//   [ title: "Event 2",
-//     location: "Burnaby",
-//     date: "January 1, 2018"
-//   ],
-//   [ title: "Event 3",
-//     location: "Burnaby",
-//     date: "January 1, 2018"
-//   ],
-//   [ title: "Event 4",
-//     location: "Burnaby",
-//     date: "January 1, 2018"
-//   ],
-//   [ title: "Event 5",
-//     location: "Burnaby",
-//     date: "January 1, 2018"
-//   ],
-//   [ title: "Event 6",
-//     location: "Burnaby",
-//     date: "January 1, 2018"
-//   ],
-//
-// };
+const LeftButton = (props) => {
+  return (<Icon
+    style={styles.headerButtonLeft}
+    onPress={() => props.nav.toggleDrawer()}
+    name='menu'
+    containerStyle={styles.headerButtonLeft}
+    color='white'
+    underlayColor='#3f91f5'
+  />)
+}
+const RightButton = (props) => {
+  return (<Icon
+    style={styles.headerButtonLeft}
+    onPress={()=> props.nav.navigate("AddEvent")}
+    name='add'
+    containerStyle={styles.headerButtonRight}
+    color='white'
+    underlayColor='#3f91f5'
+  />)
+}
 export default class Events extends React.Component {
+
   static navigationOptions = ({navigation}) => ({
     headerTitle: 'My Events',
-    headerLeft: (
-      <Icon onPress={() => navigation.toggleDrawer()}
-      name='menu'
-      color='white'></Icon>
-    ),
-    headerRight: <Icon name='edit' color='white'></Icon>
+    headerLeft: <LeftButton nav={navigation}/>,
+    headerRight: <RightButton nav={navigation}/>
   });
 
-  render() {
-    return (
-      // TODO: target, title,date, location must be fetched from DB
-      <View style={styles.container}>
-        <View style={styles.eventRow}>
-          <EventItem navigation={this.props.navigation} target={5000} fund={2323} title="Event 1" location="Vancouver" date="February 15, 2018"/>
-          <EventItem navigation={this.props.navigation} target={5000} fund={231} title="Event 2" location="Vancouver" date="February 15, 2018"/>
-          <EventItem navigation={this.props.navigation} target={5000} fund={3322} title="Event 3" location="Surrey" date="December 15, 2018"/>
-        </View>
-        <View style={styles.eventRow}>
-          <EventItem navigation={this.props.navigation} target={5000} fund={2122} title="Event 4" location="Burnaby" date="January 15, 2018"/>
-          <EventItem navigation={this.props.navigation} target={5000} fund={323} title="Event 5" location="San Francisco" date="January 15, 2018"/>
-          <EventItem navigation={this.props.navigation} target={5000} fund={1235} title="Event 6" location="Burnaby" date="January 15, 2018"/>
-        </View>
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      events: []
+    }
+  }
+
+  getEvents() {
+    AsyncStorage.getItem('jwt')
+      .then((token) => {
+        axios.get('http://localhost:8000/api/events/', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'JWT ' + token,
+          },
+        })
+        .then((res) => {
+          this.setState({
+            events: res.data
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("ERROR GETTING EVENTS");
+        })
+      }).catch((err) => {
+        console.log(err);
+        console.log("ERROR GETTING TOKEN");
+      });
+  }
+  componentWillMount() {
+    this.getEvents();
+  }
+
+  render() {
+
+    return (
+      <View style={styles.container}>
+        {this.state.events.map((ev) => (
+          <EventItem
+            key={ev.pk}
+            id={parseInt(ev.pk, 10)}
+            navigation={this.props.navigation}
+            target={parseInt(ev.target_fund,10)}
+            title={ev.title}
+            date={ev.edate}
+          />
+        ))}
       </View>
     );
   }

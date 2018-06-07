@@ -22,6 +22,7 @@ export default class EventItem extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      id: "",
       title: "",
       date: "",
       location: "",
@@ -31,14 +32,18 @@ export default class EventItem extends React.Component {
   }
   componentWillMount() {
     this.setState({
+      id: this.props.id,
       title: this.props.title,
       date: this.props.date,
       location: this.props.location,
       fund: this.props.fund,
       target: this.props.target,
-    })
-  }
+    });
 
+  }
+  componentDidMount() {
+
+  }
   render() {
     let { navigate } = this.props.navigation;
     let info = this.state;

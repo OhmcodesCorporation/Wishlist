@@ -1,6 +1,8 @@
 import React from 'react';
+import axios from 'axios';
 
-import { Stylesheet, View, Text, Image, TouchableOpacity} from 'react-native';
+import { AsyncStorage, Alert, Stylesheet, View, Text, Image, TouchableOpacity} from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import ProgressBar from '../components/ProgressBar';
 
@@ -61,28 +63,67 @@ const styles = {
   },
   textCenter: {
     textAlign: 'center'
+  },
+  headerButtonRight: {
+    paddingRight: 25,
   }
 }
+
+const RightButton = (props) => {
+  return (<Icon
+    style={styles.headerButtonLeft}
+    name='delete'
+    containerStyle={styles.headerButtonRight}
+    color='white'
+    onPress={props.del}
+    underlayColor='#3f91f5'
+  />)
+}
+
 export default class Event extends React.Component {
   static navigationOptions = ({navigation}) => {
     const { params } = navigation.state;
     return {
-      headerTitle: params ? params.props.title : "Event"
+      headerTitle: params ? params.props.title : "Event",
+      headerRight: <RightButton del={() => {
+        console.log("delete?");
+        params.handleDelete();
+      }}/>
     };
   };
+
+  deleteEvent = () => {
+    Alert.alert(
+      'Delete Event',
+      'Warning: Pressing OK will delete the event',
+      [
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'OK', onPress: () => {
+          this._delete();
+          this.props.navigation.goBack();
+         }
+        },
+      ]
+    )
+  }
+
   constructor(props){
     super(props);
     this.state = {
+      id:"",
       title: "",
       date: "",
       location: "",
       fund: 0,
       target: 0,
     }
+    this._delete = this._delete.bind(this);
+
   }
   componentWillMount() {
     let p = this.props.navigation.state.params.props;
     this.setState({
+      id: p.id,
       title: p.title,
       date: p.date,
       location: p.location,
@@ -90,6 +131,38 @@ export default class Event extends React.Component {
       target: p.target,
     });
   }
+
+  componentDidMount() {
+    console.log(this.state.id);
+    this.props.navigation.setParams({
+      handleDelete: this.deleteEvent
+    })
+  }
+  _delete() {
+    AsyncStorage.getItem('jwt')
+      .then((token) => {
+        axios({
+          method: 'DELETE',
+          url: 'http://localhost:8000/api/events/' + this.state.id + '/',
+          headers: {
+            'Authorization': 'JWT ' + token,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log("delete successful");
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("ERROR DELETING EVENT");
+        })
+      }).catch((err) => {
+        console.log(err);
+        console.log("ERROR GETTING TOKEN");
+      });
+  }
+
+
   render() {
     return (
       <View style={styles.container}>

@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, StatusBar, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
-
 import axios from 'axios';
+import { AsyncStorage, StyleSheet, StatusBar, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 
 const styles = {
   container: {
@@ -36,42 +35,38 @@ const styles = {
 
 export default class LoginForm extends React.Component {
 
+
   constructor(props){
     super(props);
 
     this.state = {
       username: "",
       password: "",
-      jwt: "",
     }
-    this.authenticate = this.authenticate.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount() {
+  authenticate(username, password) {
+    axios.post('http://127.0.0.1:8000/api/token/auth/',
+    {
+      username: username,
+      password: password,
+    })
+    .then((response) => {
+      console.log("AUTHENTICATED!");
+      AsyncStorage.setItem('jwt', response.data.token);
 
+      setTimeout(() => {
+        console.log('Logging In');
+        this.props.navigation.navigate("Home");
+      }, 1500);
+    })
+    .catch((response) => {
+      console.log("error logging in (AUTH)");
+    });
   }
-
-  authenticate(event) {
-    // call when authentication successful
-
-    if (this.state.username === 'a') {
-      this.props.handler();
-    }
-    // stay on this page if not successful
-
-    // console.log(this.state.password);
-    // axios.post('http://192.168.1.89/api/auth/token/obtain/',{
-    //   username: this.state.username,
-    //   password: this.state.password,
-    // })
-    // .then((response) => {
-    //   // deviceStorage.saveKey("id_token", response.data.access);
-    //   console.log(response.data.access);
-    // })
-    // .catch((response) => {
-    //   console.log(response);
-    //   console.log("error logging in");
-    // })
+  handleSubmit() {
+    this.authenticate(this.state.username, this.state.password);
   }
   render() {
      // success authentication
@@ -104,7 +99,7 @@ export default class LoginForm extends React.Component {
         />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}
-            onPress={this.props.authenticate}>
+            onPress={this.handleSubmit}>
             <Text style={styles.buttonText}>LOGIN</Text>
           </TouchableOpacity>
 

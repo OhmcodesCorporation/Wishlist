@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View, Button } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
 
@@ -7,7 +7,7 @@ import Wishlist from './Wishlist';
 import Login from './Login';
 import Events from './Events';
 import EventScreen from './Event'; // view more of the event
-import SignUp from '../views/Signup';
+import AddEventForm from '../components/AddEventForm';
 
 // theme for navigation bar
 const navMenuStyle = {
@@ -17,16 +17,10 @@ const navMenuStyle = {
   headerTintColor: 'white',
 };
 
-const LoginScreen = createStackNavigator({
+const WishlistScreen = createStackNavigator({
   Default: {
-    screen: Login,
-  },
-  Home: {
     screen: Wishlist,
     navigationOptions: navMenuStyle
-  },
-  Signup: {
-    screen: SignUp // TODO: UNFINISHED PAGE
   }
 });
 
@@ -38,15 +32,20 @@ const EventsScreen = createStackNavigator({
   Event: {
     screen: EventScreen, //not to be confused with Event"S"
     navigationOptions: navMenuStyle
+  },
+  AddEvent: {
+    screen: AddEventForm,
+    navigationOptions: navMenuStyle
   }
-})
+});
+
 const MyApp = createDrawerNavigator({
   Home: {
-    screen: LoginScreen // change this to LOGIN LATER AS DEFAULT
+    screen: WishlistScreen, //DEFAULT: WishlistScreen
   },
   Events: {
     screen: EventsScreen,
-  }
+  },
 
 });
 
