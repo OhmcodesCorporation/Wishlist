@@ -7,6 +7,7 @@ import LoginForm from '../components/LoginForm';
 
 import SignUp from './Signup';
 import Home from './Home';
+import Welcome from './Welcome';
 
 const styles = {
   container: {
@@ -29,8 +30,6 @@ const styles = {
   },
 }
 
-
-
 class Login extends React.Component {
   static navigationOptions = {
     header: null
@@ -43,24 +42,59 @@ class Login extends React.Component {
           <Image style={styles.logo} source={require('../assets/atom.png')}/>
           <Text style={styles.title}>An app where your wishes may come true</Text>
         </View>
-        <View style={styles.formContainer}>
-          <LoginForm
-            authenticate={this.authenticate}
-            navigation={this.props.navigation}/>
+        <View>
+          <LoginForm navigation={this.props.navigation}/>
         </View>
       </KeyboardAvoidingView>
     );
   }
 }
+const fade = (props) => {
+  const {position, scene} = props
+
+  const index = scene.index
+
+  const translateX = 0
+  const translateY = 0
+
+  const opacity = position.interpolate({
+      inputRange: [index - 0.7, index, index + 0.7],
+      outputRange: [0.3, 1, 0.3]
+  })
+
+  return {
+      opacity,
+      transform: [{translateX}, {translateY}]
+  }
+}
+
 const LoginScreen = createStackNavigator({
-  Default: Login,
-  Home: {
-    screen: Home,
-    navigationOptions: {
-      header: null
-    }
+    Default: {
+      screen: Welcome, // DEFAULT: LOGIN
+      navigationOptions: {
+        header: null
+      }
+    },
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        header: null
+      }
+    },
+    Home: {
+      screen: Home,
+      navigationOptions: {
+        header: null
+      }
+    },
+    Signup: SignUp,
   },
-  Signup: SignUp,
-});
+  {
+    transitionConfig: () => ({
+        screenInterpolator: (props) => {
+            return fade(props)
+        }
+    })
+  });
 
 export default LoginScreen;

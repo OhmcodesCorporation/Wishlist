@@ -5,6 +5,7 @@ import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
 
 import Wishlist from './Wishlist';
 import Login from './Login';
+import SignOut from './SignOut';
 import Events from './Events';
 import EventScreen from './Event'; // view more of the event
 import AddEventForm from '../components/AddEventForm';
@@ -46,7 +47,12 @@ const MyApp = createDrawerNavigator({
   Events: {
     screen: EventsScreen,
   },
-
+  Wishlist: {
+    screen: WishlistScreen,
+  },
+  SignOut: {
+    screen: SignOut,
+  }
 });
 
 export default MyApp;

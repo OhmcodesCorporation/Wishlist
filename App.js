@@ -30,7 +30,7 @@ export default class App extends React.Component {
       this.setState({
         loaded: true,
       })
-    }, 1000);
+    }, 600);
   }
 
   verify() {
@@ -62,7 +62,7 @@ export default class App extends React.Component {
     return <Login/>;
   }
   render() {
-    
+
     return (
       <View style={styles.container}>
         {(this.state.loaded) ? this._renderScreen() : <ActivityIndicator size="large" color='#0000ff'/>}

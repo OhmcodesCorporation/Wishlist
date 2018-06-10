@@ -11,7 +11,7 @@ const styles = {
     flexDirection: 'column',
     padding: 10,
     flexWrap: 'wrap',
-    justifyContent: 'space-between'
+    justifyContent: 'space-around'
   },
   eventRow: {
     padding: 10,
@@ -38,7 +38,7 @@ const LeftButton = (props) => {
 const RightButton = (props) => {
   return (<Icon
     style={styles.headerButtonLeft}
-    onPress={()=> props.nav.navigate("AddEvent")}
+    onPress={()=> props.nav.navigate('AddEvent', {props: props})}
     name='add'
     containerStyle={styles.headerButtonRight}
     color='white'
@@ -55,7 +55,6 @@ export default class Events extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       events: []
     }

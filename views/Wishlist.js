@@ -30,7 +30,7 @@ const LeftButton = (props) => {
 }
 export default class Wishlist extends React.Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Wishlist',
+    headerTitle: 'My Wishlist',
     headerLeft: <LeftButton nav={navigation}/>
   });
 

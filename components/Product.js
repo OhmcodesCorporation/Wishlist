@@ -38,6 +38,7 @@ export default class Wishlist extends React.Component {
             The idea with React Native Elements is more about component structure than actual design.
           </Text>
           <Button
+            raised
             icon={{name: 'code'}}
             backgroundColor='#03A9F4'
             buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}

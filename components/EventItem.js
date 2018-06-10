@@ -1,12 +1,12 @@
 import React from 'react';
-
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+
+import { Card } from 'react-native-elements';
 
 const styles = {
   container: {
-    width: 150,
-    height: 150,
-    backgroundColor: 'steelblue',
+    width: 175,
+    height: 100,
     justifyContent: 'center',
   },
   title: {
@@ -41,9 +41,6 @@ export default class EventItem extends React.Component {
     });
 
   }
-  componentDidMount() {
-
-  }
   render() {
     let { navigate } = this.props.navigation;
     let info = this.state;
@@ -52,13 +49,12 @@ export default class EventItem extends React.Component {
         style={styles.container}
         onPress={()=>{navigate('Event', {props: info})}}
         >
-        <Text style={styles.title}>
-          {this.state.title}
-        </Text>
-        <Text style={styles.info}>
-          {this.state.date}
-          {this.state.location}
-        </Text>
+        <Card title={this.state.title}>
+          <Text style={styles.info}>
+            {this.state.date}
+            {this.state.location}
+          </Text>
+        </Card>
       </TouchableOpacity>
     );
   }

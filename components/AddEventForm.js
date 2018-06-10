@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { AsyncStorage, StyleSheet, StatusBar, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 
+import DateTimePicker from 'react-native-modal-datetime-picker';
 const styles = {
   container: {
     padding: 20,
@@ -12,17 +13,13 @@ const styles = {
     height: 40,
     backgroundColor: 'rgba(255,255,255,0.2)',
     marginBottom: 10,
-    color: '#FFF',
     paddingHorizontal: 10,
-    textAlign: 'center'
   },
   descriptionInput: {
     height: 200,
     backgroundColor: 'rgba(255,255,255,0.2)',
     marginBottom: 10,
-    color: '#FFF',
     paddingHorizontal: 10,
-    textAlign: 'center'
   },
   buttonContainer: {
     paddingVertical: 10,
@@ -38,15 +35,18 @@ const styles = {
     backgroundColor: '#2980b9',
   },
   buttonText: {
-    textAlign: 'center',
     color: "#FFFFFF"
   }
 }
 
 export default class LoginForm extends React.Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: 'My Events',
-  });
+  static navigationOptions = ({navigation}) => {
+    const { params } = navigation.state;
+    console.log(navigation.state);
+    return {
+      headerTitle: "Add Event"
+    }
+  };
 
   constructor(props){
     super(props);
@@ -56,9 +56,32 @@ export default class LoginForm extends React.Component {
       desc: "",
       edate: "",
       target_fund: "",
+      isDateTimePickerVisible: false,
     }
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+
+  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+
+  _handleDatePicked = (date) => {
+    console.log('A date has been picked: ', date);
+    this._hideDateTimePicker();
+
+    // convert date to readable format
+    let c_date = new Intl.DateTimeFormat('en-GB', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    }).format(date);
+
+    this.setState({
+      converted_date: c_date,
+      date: date
+    });
+
+  };
 
   addEvent() {
     AsyncStorage.getItem('jwt')
@@ -113,15 +136,25 @@ export default class LoginForm extends React.Component {
           onSubmitEditing={() => this.passwordInput.focus()}
           style={styles.input}
         />
-        <TextInput
-          placeholder="date"
-          label="date"
-          returnKeyType="next"
-          placeholderTextColor="rgba(255,255,255,0.7)"
-          style={styles.input}
-          onChangeText={(input) => this.setState({date: input})}
-          blurOnSubmit
+        <TouchableOpacity >
+          <TextInput
+            placeholder={this.state.converted_date}
+            label="date"
+            returnKeyType="next"
+            placeholderTextColor="rgba(255,255,255,0.7)"
+            style={styles.input}
+            onFocus={this._showDateTimePicker}
+            blurOnSubmit
+            >
+          </TextInput>
+        </TouchableOpacity>
+
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this._handleDatePicked}
+          onCancel={this._hideDateTimePicker}
         />
+
         <TextInput
           placeholder="Add a little description"
           label="description"
