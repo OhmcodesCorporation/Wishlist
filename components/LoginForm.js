@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { AsyncStorage, StyleSheet, StatusBar, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 
+import API_URLS from '../common/connections';
+
 const styles = {
   container: {
     padding: 20
@@ -47,7 +49,7 @@ export default class LoginForm extends React.Component {
   }
 
   authenticate(username, password) {
-    axios.post('http://127.0.0.1:8000/api/token/auth/',
+    axios.post(API_URLS.authentication_url,
     {
       username: username,
       password: password,

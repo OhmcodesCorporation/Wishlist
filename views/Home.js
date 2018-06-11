@@ -4,7 +4,7 @@ import { Icon } from 'react-native-elements';
 import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
 
 import Wishlist from './Wishlist';
-import Login from './Login';
+import Login from './LoggedOut';
 import SignOut from './SignOut';
 import Events from './Events';
 import EventScreen from './Event'; // view more of the event
@@ -26,16 +26,17 @@ const WishlistScreen = createStackNavigator({
 });
 
 const EventsScreen = createStackNavigator({
+  Default: Events,
+  Event: EventScreen,
+  AddEvent: AddEventForm
+},
+{
+  navigationOptions: navMenuStyle
+});
+
+const LoginScreen = createStackNavigator({
   Default: {
-    screen: Events,
-    navigationOptions: navMenuStyle
-  },
-  Event: {
-    screen: EventScreen, //not to be confused with Event"S"
-    navigationOptions: navMenuStyle
-  },
-  AddEvent: {
-    screen: AddEventForm,
+    screen: Login,
     navigationOptions: navMenuStyle
   }
 });
@@ -52,7 +53,11 @@ const MyApp = createDrawerNavigator({
   },
   SignOut: {
     screen: SignOut,
-  }
+    navigationOptions: {
+      title: "Log Out",
+      navMenuStyle
+    }
+  },
 });
 
 export default MyApp;

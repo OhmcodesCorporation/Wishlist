@@ -1,63 +1,90 @@
 import React from 'react';
-import { View, ImageBackground, Text } from 'react-native';
+import axios from 'axios';
+import { AsyncStorage, View, ActivityIndicator, ImageBackground, Text } from 'react-native';
+import { createSwitchNavigator, createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import { Button } from 'react-native-elements';
 
-const bg_loc = '../assets/wish-bg-op.png';
+import API_URLS from '../common/connections';
 
-const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column'
-  },
-  welcome_container: {
-    width: 250,
-    alignSelf: 'center'
-  },
-  title: {
-    color: 'white',
-    fontSize: 48,
-    fontWeight: 'bold',
+import LoadingScreen from './Loading';
+import Login from './Login';
+import Home from './Home';
 
-  },
-  subtitle: {
-    color: 'white',
-    fontSize: 20,
-  },
-  getStartedBtn: {
-    bottom: -200,
-    width: 250,
+class Welcome extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAuthenticated: false,
+    }
   }
 
-}
-export default class Welcome extends React.Component {
+  _verify() {
+    AsyncStorage.getItem('jwt')
+    .then((token) => {
+      axios.post(API_URLS.verify_token_url,
+      {
+        token: token,
+      })
+      .then((response) => {
+        console.log("Token Verified!");
+        this.setState({
+          isAuthenticated: true,
+        });
+      })
+      .catch((response) => {
+        console.log("Token Verification FAILED");
+
+      });
+    }).catch((error) => {
+      console.log("token expired (VERIFY)");
+    });
+  }
+
+  componentWillMount() {
+    this._verify();
+    setTimeout(()=> {
+      if (this.state.isAuthenticated) {
+        this.props.navigation.navigate("App");
+      } else {
+        this.props.navigation.navigate("Auth");
+      }
+    }, 750);
+  }
 
   render() {
-
     return (
-      <ImageBackground
-        style={styles.container}
-        source={require(bg_loc)}>
-        <View style={styles.welcome_container}>
-          <Text style={styles.title}>
-            WISH.
-          </Text>
-          <Text style={styles.subtitle}>
-            Be careful what you wish for, you might just get it.
-          </Text>
-        </View>
-        <Button
-          clear={true}
-          onPress={()=> this.props.navigation.navigate("Login")}
-          style={styles.getStartedBtn}
-          rounded
-          color='black'
-          backgroundColor='white'
-          title='Get Started'
-          />
-      </ImageBackground>
+      <LoadingScreen/>
     );
   }
 }
+
+const fade = (props) => {
+  const {position, scene} = props
+
+  const index = scene.index
+
+  const translateX = 0
+  const translateY = 0
+
+  const opacity = position.interpolate({
+      inputRange: [index - 0.7, index, index + 0.7],
+      outputRange: [0.3, 1, 0.3]
+  })
+
+  return {
+      opacity,
+      transform: [{translateX}, {translateY}]
+  }
+}
+
+export default createSwitchNavigator(
+  {
+    AuthLoading: Welcome,
+    App: Home,
+    Auth: Login,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  },
+);

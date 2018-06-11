@@ -4,6 +4,8 @@ import axios from 'axios';
 import { AsyncStorage, Alert, Stylesheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import { Icon } from 'react-native-elements';
 
+import API_URLS from '../common/connections';
+
 import ProgressBar from '../components/ProgressBar';
 
 const styles = {
@@ -143,7 +145,7 @@ export default class Event extends React.Component {
       .then((token) => {
         axios({
           method: 'DELETE',
-          url: 'http://localhost:8000/api/events/' + this.state.id + '/',
+          url: delete_event_url + this.state.id + '/',
           headers: {
             'Authorization': 'JWT ' + token,
             'Content-Type': 'application/json',

@@ -4,6 +4,7 @@ import { AsyncStorage, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import EventItem from '../components/EventItem';
+import API_URLS from '../common/connections';
 
 const styles = {
   container: {
@@ -63,7 +64,7 @@ export default class Events extends React.Component {
   getEvents() {
     AsyncStorage.getItem('jwt')
       .then((token) => {
-        axios.get('http://localhost:8000/api/events/', {
+        axios.get(API_URLS.get_all_events_url, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'JWT ' + token,
