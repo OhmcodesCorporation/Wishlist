@@ -53,10 +53,7 @@ const MyApp = createDrawerNavigator({
   },
   SignOut: {
     screen: SignOut,
-    navigationOptions: {
-      title: "Log Out",
-      navMenuStyle
-    }
+    navigationOptions: navMenuStyle
   },
 });
 

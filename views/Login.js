@@ -39,7 +39,16 @@ const LoginScreen = createStackNavigator({
         header: null
       }
     },
-    Signup: SignUp,
+    Signup: {
+      screen: SignUp,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: '#3f91f5' /* color theme */
+        },
+        headerTintColor: 'white',
+      }
+    }
+
   },
   {
     transitionConfig: () => ({
