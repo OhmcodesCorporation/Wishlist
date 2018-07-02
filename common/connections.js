@@ -6,5 +6,6 @@ const API_URLS = {
   post_new_event_url : HOST + '/events/',
   get_all_events_url : HOST + '/events/',
   delete_event_url: HOST + '/events/',
+  register_user_url: HOST + '/register/',
 }
 export default API_URLS;

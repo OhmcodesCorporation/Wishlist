@@ -28,9 +28,12 @@ const fade = (props) => {
 
 const LoginScreen = createStackNavigator({
     Default: {
-      screen: Login, // DEFAULT: LOGIN
+      screen: SignUp, // DEFAULT: LOGIN
       navigationOptions: {
-        header: null
+        headerStyle: {
+          backgroundColor: '#3f91f5' /* color theme */
+        },
+        headerTintColor: 'white',
       }
     },
     Home: {
