@@ -2,11 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import { AsyncStorage, StyleSheet, StatusBar, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 
+import { FormInput } from 'react-native-elements';
+
+import API_URLS from '../common/connections';
+
 import DateTimePicker from 'react-native-modal-datetime-picker';
 const styles = {
   container: {
     padding: 20,
-    backgroundColor: '#3498db',
     flex: 1,
   },
   input: {
@@ -42,7 +45,6 @@ const styles = {
 export default class LoginForm extends React.Component {
   static navigationOptions = ({navigation}) => {
     const { params } = navigation.state;
-    console.log(navigation.state);
     return {
       headerTitle: "Add Event"
     }
@@ -84,17 +86,18 @@ export default class LoginForm extends React.Component {
   };
 
   addEvent() {
+    // will return error for existing same event name
     AsyncStorage.getItem('jwt')
       .then((token) => {
         axios({
           method: 'POST',
-          url: 'http://localhost:8000/api/events/',
+          url: API_URLS.post_new_event_url,
           headers: {
             'Authorization': 'JWT ' + token,
             'Content-Type': 'application/json',
           },
           data: {
-           "title":"Test Event 5",
+           "title":"Test Event 512",
            "desc":"This is a test for curl",
            "edate":"2018-07-23T02:22:43Z",
            "target_fund":"3500",
@@ -105,8 +108,8 @@ export default class LoginForm extends React.Component {
         .then((res) => {
           console.log(res);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((res, err) => {
+          console.log(res);
           console.log("ERROR ADDING EVENT");
         })
       }).catch((err) => {
@@ -125,6 +128,7 @@ export default class LoginForm extends React.Component {
         <StatusBar
           barStyle="light-content"
         />
+        <FormInput/>
         <TextInput
           placeholder="title"
           placeholderTextColor="rgba(255,255,255,0.7)"

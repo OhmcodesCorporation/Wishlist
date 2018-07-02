@@ -49,7 +49,7 @@ class Welcome extends React.Component {
       } else {
         this.props.navigation.navigate("Auth");
       }
-    }, 750);
+    }, 1250);
   }
 
   render() {

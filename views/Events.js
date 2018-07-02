@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { AsyncStorage, View } from 'react-native';
+import { AsyncStorage, ScrollView, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import EventItem from '../components/EventItem';
@@ -9,14 +9,11 @@ import API_URLS from '../common/connections';
 const styles = {
   container: {
     flex: 1,
-    flexDirection: 'column',
-    padding: 10,
+    flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around'
   },
-  eventRow: {
-    padding: 10,
-    justifyContent: 'space-around'
+  item: {
+
   },
   headerButtonLeft: {
     paddingLeft: 25,
@@ -60,7 +57,6 @@ export default class Events extends React.Component {
       events: []
     }
   }
-
   getEvents() {
     AsyncStorage.getItem('jwt')
       .then((token) => {
@@ -87,13 +83,11 @@ export default class Events extends React.Component {
   componentWillMount() {
     this.getEvents();
   }
-
   render() {
-
     return (
-      <View style={styles.container}>
-        {this.state.events.map((ev) => (
-          <EventItem
+      <ScrollView style={styles.container}>
+        {this.state.events.map((ev, index) => (
+          <EventItem style={styles.item}
             key={ev.pk}
             id={parseInt(ev.pk, 10)}
             navigation={this.props.navigation}
@@ -102,7 +96,7 @@ export default class Events extends React.Component {
             date={ev.edate}
           />
         ))}
-      </View>
+      </ScrollView>
     );
   }
 }

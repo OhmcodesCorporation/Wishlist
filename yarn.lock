@@ -5624,6 +5624,12 @@ react-lifecycles-compat@^3, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
+react-native-animatable@^1.2.4:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.0.tgz#b5c3940fc758cfd9b2fe54613a457c4b6962b46e"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-branch@2.0.0-beta.3:
   version "2.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.0.0-beta.3.tgz#2167af86bbc9f964bd45bd5f37684e5b54965e32"
@@ -5667,6 +5673,20 @@ react-native-maps@0.21.0:
   dependencies:
     babel-plugin-module-resolver "^2.3.0"
     babel-preset-react-native "1.9.0"
+
+react-native-modal-datetime-picker@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-5.1.0.tgz#6e183531170881c2ff5b0742d132060f828e2b77"
+  dependencies:
+    prop-types "^15.6.1"
+    react-native-modal "^5.4.0"
+
+react-native-modal@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-5.4.0.tgz#95f70b5d68e08824951cd11038b9db2d6fdb9962"
+  dependencies:
+    prop-types "^15.6.1"
+    react-native-animatable "^1.2.4"
 
 react-native-progress-bar-animated@^1.0.6:
   version "1.0.6"
@@ -5753,15 +5773,23 @@ react-native-vector-icons@4.5.0:
     prop-types "^15.5.10"
     yargs "^8.0.2"
 
+react-native-vector-icons@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-4.6.0.tgz#e4014311ffa6de397d914ffc31b7097a874cc8d5"
+  dependencies:
+    lodash "^4.0.0"
+    prop-types "^15.5.10"
+    yargs "^8.0.2"
+
 react-native-web-maps@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-native-web-maps/-/react-native-web-maps-0.1.0.tgz#a5ead1e001376df2a3e3afbe49f057c4356f4315"
   dependencies:
     react-google-maps "^7.3.0"
 
-react-native@~0.55.2:
-  version "0.55.4"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.55.4.tgz#eecffada3750a928e2ddd07cf11d857ae9751c30"
+"react-native@https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz":
+  version "0.55.2"
+  resolved "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz#13850be33f38b0ddc7257a4a30109a41c6305a76"
   dependencies:
     absolute-path "^0.0.0"
     art "^0.10.0"

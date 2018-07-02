@@ -14,7 +14,6 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#03A9F4',
     height: "100%",
   },
   header: {
@@ -145,7 +144,7 @@ export default class Event extends React.Component {
       .then((token) => {
         axios({
           method: 'DELETE',
-          url: delete_event_url + this.state.id + '/',
+          url: API_URLS.delete_event_url + this.state.id + '/',
           headers: {
             'Authorization': 'JWT ' + token,
             'Content-Type': 'application/json',
