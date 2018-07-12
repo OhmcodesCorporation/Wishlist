@@ -6,22 +6,6 @@ import { Icon } from 'react-native-elements';
 import EventItem from '../components/EventItem';
 import API_URLS from '../common/connections';
 
-const styles = {
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  item: {
-
-  },
-  headerButtonLeft: {
-    paddingLeft: 25,
-  },
-  headerButtonRight: {
-    paddingRight: 25,
-  }
-}
 
 const LeftButton = (props) => {
   return (<Icon
@@ -44,13 +28,11 @@ const RightButton = (props) => {
   />)
 }
 export default class Events extends React.Component {
-
   static navigationOptions = ({navigation}) => ({
     headerTitle: 'My Events',
     headerLeft: <LeftButton nav={navigation}/>,
     headerRight: <RightButton nav={navigation}/>
   });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -85,18 +67,34 @@ export default class Events extends React.Component {
   }
   render() {
     return (
-      <ScrollView style={styles.container}>
-        {this.state.events.map((ev, index) => (
-          <EventItem style={styles.item}
-            key={ev.pk}
-            id={parseInt(ev.pk, 10)}
-            navigation={this.props.navigation}
-            target={parseInt(ev.target_fund,10)}
-            title={ev.title}
-            date={ev.edate}
-          />
-        ))}
+      <ScrollView>
+        <View style={styles.container}>
+          {this.state.events.reverse().map((ev, index) => (
+            <EventItem style={styles.item} key={ev.pk}
+              id={parseInt(ev.pk, 10)}
+              navigation={this.props.navigation}
+              target={parseInt(ev.target_fund,10)}
+              title={ev.title}
+              date={ev.edate}
+              desc={ev.desc}
+            />
+          ))}
+        </View>
       </ScrollView>
     );
+  }
+}
+const styles = {
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
+  headerButtonLeft: {
+    paddingLeft: 25,
+  },
+  headerButtonRight: {
+    paddingRight: 25,
   }
 }

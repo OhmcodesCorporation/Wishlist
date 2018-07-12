@@ -8,6 +8,142 @@ import API_URLS from '../common/connections';
 
 import ProgressBar from '../components/ProgressBar';
 
+
+const RightButton = (props) => {
+  return (<Icon
+    style={styles.headerButtonLeft}
+    name='delete'
+    containerStyle={styles.headerButtonRight}
+    color='white'
+    onPress={props.del}
+    underlayColor='#3f91f5'
+  />)
+}
+
+export default class Event extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    const { params } = navigation.state;
+    return {
+      headerTitle: params ? params.props.title : "Event",
+      headerRight: <RightButton del={() => {
+        console.log("delete?");
+        params.handleDelete();
+      }}/>
+    };
+  };
+
+  constructor(props){
+    super(props);
+    this.state = {
+      id:"",
+      title: "",
+      date: "",
+      desc: "",
+      location: "",
+      fund: 0,
+      target: 0,
+    }
+    this._delete = this._delete.bind(this);
+
+  }
+  componentWillMount() {
+    let p = this.props.navigation.state.params.props;
+    this.setState({
+      id: p.id,
+      title: p.title,
+      desc: p.desc,
+      date: p.date,
+      location: p.location,
+      fund: p.fund,
+      target: p.target,
+    });
+  }
+  deleteEvent = () => {
+    Alert.alert(
+      'Delete Event',
+      'Warning: Pressing OK will delete the event',
+      [
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'OK', onPress: () => {
+          this._delete();
+          this.props.navigation.goBack();
+         }
+        },
+      ]
+    )
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      handleDelete: this.deleteEvent
+    })
+  }
+  _delete() {
+    AsyncStorage.getItem('jwt')
+      .then((token) => {
+        axios({
+          method: 'DELETE',
+          url: API_URLS.delete_event_url + this.state.id + '/',
+          headers: {
+            'Authorization': 'JWT ' + token,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log("delete successful");
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("ERROR DELETING EVENT");
+        })
+      }).catch((err) => {
+        console.log(err);
+        console.log("ERROR GETTING TOKEN");
+      });
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={[styles.headerText, styles.textColor]}>
+            Due {this.state.date}
+          </Text>
+        </View>
+        <View style={styles.wishItemContainer}>
+          <Image style={styles.wishItem}
+          source={require('../assets/lamp.jpg')}
+          />
+          <Text>
+          {this.state.desc}
+          </Text>
+
+        </View>
+        <View style={styles.progressContainer}>
+          <Text style={styles.textCenter}>
+            Current: ${this.state.fund}
+          </Text>
+          <ProgressBar size={this.state.fund} target={this.state.target}/>
+          <Text style={styles.textCenter}>
+            Target: ${this.state.target}
+          </Text>
+        </View>
+
+        <View style={styles.inviteeContainer}>
+          <Text>
+            Invitees:
+          </Text>
+          {/* INVITEES */}
+          <View></View>
+          <TouchableOpacity style={styles.invitee}>A</TouchableOpacity>
+          <TouchableOpacity style={styles.invitee}>A</TouchableOpacity>
+          <TouchableOpacity style={styles.invitee}>A</TouchableOpacity>
+          <TouchableOpacity style={styles.invitee}>A</TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
+}
 const styles = {
   container: {
     flex: 1,
@@ -67,142 +203,5 @@ const styles = {
   },
   headerButtonRight: {
     paddingRight: 25,
-  }
-}
-
-const RightButton = (props) => {
-  return (<Icon
-    style={styles.headerButtonLeft}
-    name='delete'
-    containerStyle={styles.headerButtonRight}
-    color='white'
-    onPress={props.del}
-    underlayColor='#3f91f5'
-  />)
-}
-
-export default class Event extends React.Component {
-  static navigationOptions = ({navigation}) => {
-    const { params } = navigation.state;
-    return {
-      headerTitle: params ? params.props.title : "Event",
-      headerRight: <RightButton del={() => {
-        console.log("delete?");
-        params.handleDelete();
-      }}/>
-    };
-  };
-
-  deleteEvent = () => {
-    Alert.alert(
-      'Delete Event',
-      'Warning: Pressing OK will delete the event',
-      [
-        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        {text: 'OK', onPress: () => {
-          this._delete();
-          this.props.navigation.goBack();
-         }
-        },
-      ]
-    )
-  }
-
-  constructor(props){
-    super(props);
-    this.state = {
-      id:"",
-      title: "",
-      date: "",
-      location: "",
-      fund: 0,
-      target: 0,
-    }
-    this._delete = this._delete.bind(this);
-
-  }
-  componentWillMount() {
-    let p = this.props.navigation.state.params.props;
-    this.setState({
-      id: p.id,
-      title: p.title,
-      date: p.date,
-      location: p.location,
-      fund: p.fund,
-      target: p.target,
-    });
-  }
-
-  componentDidMount() {
-    console.log(this.state.id);
-    this.props.navigation.setParams({
-      handleDelete: this.deleteEvent
-    })
-  }
-  _delete() {
-    AsyncStorage.getItem('jwt')
-      .then((token) => {
-        axios({
-          method: 'DELETE',
-          url: API_URLS.delete_event_url + this.state.id + '/',
-          headers: {
-            'Authorization': 'JWT ' + token,
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((res) => {
-          console.log("delete successful");
-        })
-        .catch((err) => {
-          console.log(err);
-          console.log("ERROR DELETING EVENT");
-        })
-      }).catch((err) => {
-        console.log(err);
-        console.log("ERROR GETTING TOKEN");
-      });
-  }
-
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={[styles.headerText, styles.textColor]}>
-            Due {this.state.date}
-          </Text>
-        </View>
-        <View style={styles.wishItemContainer}>
-          <Image style={styles.wishItem}
-          source={require('../assets/lamp.jpg')}
-          />
-          <Text>
-            Reason: LOREM IPSUM IUPSS PPSID MSAUD
-          </Text>
-
-        </View>
-        <View style={styles.progressContainer}>
-          <Text style={styles.textCenter}>
-            Current: ${this.state.fund}
-          </Text>
-          <ProgressBar size={this.state.fund} target={this.state.target}/>
-          <Text style={styles.textCenter}>
-            Target: ${this.state.target}
-          </Text>
-        </View>
-
-        <View style={styles.inviteeContainer}>
-          <Text>
-            Invitees:
-          </Text>
-          {/* INVITEES */}
-          <View></View>
-          <TouchableOpacity style={styles.invitee}>A</TouchableOpacity>
-          <TouchableOpacity style={styles.invitee}>A</TouchableOpacity>
-          <TouchableOpacity style={styles.invitee}>A</TouchableOpacity>
-          <TouchableOpacity style={styles.invitee}>A</TouchableOpacity>
-        </View>
-      </View>
-    )
   }
 }

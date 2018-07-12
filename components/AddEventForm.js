@@ -7,40 +7,6 @@ import { FormInput } from 'react-native-elements';
 import API_URLS from '../common/connections';
 
 import DateTimePicker from 'react-native-modal-datetime-picker';
-const styles = {
-  container: {
-    padding: 20,
-    flex: 1,
-  },
-  input: {
-    height: 40,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  descriptionInput: {
-    height: 200,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  buttonContainer: {
-    paddingVertical: 10,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  button: {
-    width: 70,
-    height: 40,
-    marginLeft: 10,
-    justifyContent: 'center',
-    backgroundColor: '#2980b9',
-  },
-  buttonText: {
-    color: "#FFFFFF"
-  }
-}
 
 export default class LoginForm extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -97,16 +63,20 @@ export default class LoginForm extends React.Component {
             'Content-Type': 'application/json',
           },
           data: {
-           "title":"Test Event 512",
-           "desc":"This is a test for curl",
-           "edate":"2018-07-23T02:22:43Z",
+           "title": this.state.title,
+           "desc": this.state.desc,
+           "edate": this.state.date,
            "target_fund":"3500",
            "status":"inc",
            "visibleto":"all"
           }
         })
         .then((res) => {
-          console.log(res);
+          console.log("SUCCESS ADDING EVENT");
+          setTimeout(()=>{
+            this.props.navigation.goBack();
+          }, 500);
+
         })
         .catch((res, err) => {
           console.log(res);
@@ -128,7 +98,6 @@ export default class LoginForm extends React.Component {
         <StatusBar
           barStyle="light-content"
         />
-        <FormInput/>
         <TextInput
           placeholder="title"
           placeholderTextColor="rgba(255,255,255,0.7)"
@@ -188,5 +157,40 @@ export default class LoginForm extends React.Component {
         </View>
       </View>
     );
+  }
+}
+const styles = {
+  container: {
+    padding: 20,
+    flex: 1,
+    backgroundColor: '#3f91f5'
+  },
+  input: {
+    height: 40,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  descriptionInput: {
+    height: 200,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  buttonContainer: {
+    paddingVertical: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  button: {
+    width: 70,
+    height: 40,
+    marginLeft: 10,
+    justifyContent: 'center',
+    backgroundColor: '#2980b9',
+  },
+  buttonText: {
+    color: "#FFFFFF"
   }
 }

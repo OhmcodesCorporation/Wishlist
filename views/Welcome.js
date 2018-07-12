@@ -80,7 +80,7 @@ const fade = (props) => {
 
 export default createSwitchNavigator(
   {
-    AuthLoading: Welcome,
+    AuthLoading: Welcome, // default: Welcome
     App: Home,
     Auth: Login,
   },

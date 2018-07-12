@@ -20,7 +20,7 @@ export default class SignOut extends React.Component {
         loggedOut: true,
       });
       setTimeout(()=> {
-        this.props.navigation.popToTop();
+        this.props.navigation.pop();
       }, 1000);
     }).catch((error) => {
       console.log(error);

@@ -43,7 +43,7 @@ const LoginScreen = createStackNavigator({
 
 const MyApp = createDrawerNavigator({
   Home: {
-    screen: EventsScreen, //DEFAULT: WishlistScreen
+    screen: WishlistScreen, //DEFAULT: WishlistScreen
   },
   Events: {
     screen: EventsScreen,

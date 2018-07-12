@@ -6,8 +6,7 @@ import { Card } from 'react-native-elements';
 const styles = {
   container: {
     width: 175,
-    height: 100,
-    justifyContent: 'center',
+    height: 175,
   },
   title: {
     fontSize: 20,
@@ -24,6 +23,7 @@ export default class EventItem extends React.Component {
     this.state = {
       id: "",
       title: "",
+      desc: "",
       date: "",
       location: "",
       fund: 0,
@@ -34,6 +34,7 @@ export default class EventItem extends React.Component {
     this.setState({
       id: this.props.id,
       title: this.props.title,
+      desc: this.props.desc,
       date: this.props.date,
       location: this.props.location,
       fund: this.props.fund,
