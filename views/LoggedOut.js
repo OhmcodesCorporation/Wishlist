@@ -31,7 +31,6 @@ export default class Login extends React.Component {
     .then((response) => {
       console.log("AUTHENTICATED!");
       AsyncStorage.setItem('jwt', response.data.token);
-
       setTimeout(() => {
         console.log('Logging In');
         this.props.navigation.navigate("Home");

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { AsyncStorage, ScrollView, View } from 'react-native';
+import { AsyncStorage, ScrollView, View, RefreshControl } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import EventItem from '../components/EventItem';
@@ -31,32 +31,51 @@ export default class Events extends React.Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: 'My Events',
     headerLeft: <LeftButton nav={navigation}/>,
-    headerRight: <RightButton nav={navigation}/>
+    headerRight: <RightButton nav={navigation}/>,
+    headerStyle: {
+      backgroundColor: '#3f91f5',
+    },
+    headerTitleStyle: {
+      color: 'white'
+    }
+
   });
   constructor(props) {
     super(props);
     this.state = {
-      events: []
+      events: [],
+      refreshing: false,
     }
+    this.getEvents = this.getEvents.bind(this);
   }
   getEvents() {
+
     AsyncStorage.getItem('jwt')
       .then((token) => {
-        axios.get(API_URLS.get_all_events_url, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'JWT ' + token,
-          },
-        })
-        .then((res) => {
-          this.setState({
-            events: res.data
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          console.log("ERROR GETTING EVENTS");
-        })
+        this.setState({
+          refreshing: true
+        });
+        setTimeout(()=> {
+          axios.get(API_URLS.get_all_events_url, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'JWT ' + token,
+            },
+          })
+          .then((res) => {
+            let reversed = res.data.reverse();
+            this.setState({
+              refreshing: false,
+              events: reversed
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            console.log("ERROR GETTING EVENTS");
+          })
+        }, 500);
+
+
       }).catch((err) => {
         console.log(err);
         console.log("ERROR GETTING TOKEN");
@@ -67,9 +86,15 @@ export default class Events extends React.Component {
   }
   render() {
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.getEvents}
+          />
+        }>
         <View style={styles.container}>
-          {this.state.events.reverse().map((ev, index) => (
+          {this.state.events.map((ev, index) => (
             <EventItem style={styles.item} key={ev.pk}
               id={parseInt(ev.pk, 10)}
               navigation={this.props.navigation}

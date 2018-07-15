@@ -4,7 +4,9 @@ import { AsyncStorage } from 'react-native';
 import LoadingScreen from './Loading';
 
 export default class SignOut extends React.Component {
-
+  static navigationOptions = {
+    drawerLabel: 'Sign Out',
+  }
   constructor(props){
     super(props);
     this.state = {
@@ -20,7 +22,7 @@ export default class SignOut extends React.Component {
         loggedOut: true,
       });
       setTimeout(()=> {
-        this.props.navigation.pop();
+        this.props.navigation.popToTop();
       }, 1000);
     }).catch((error) => {
       console.log(error);

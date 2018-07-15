@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { AsyncStorage, StyleSheet, StatusBar, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 
-import { FormInput } from 'react-native-elements';
+import { FormInput, Icon } from 'react-native-elements';
 
 import API_URLS from '../common/connections';
 
@@ -12,7 +12,21 @@ export default class LoginForm extends React.Component {
   static navigationOptions = ({navigation}) => {
     const { params } = navigation.state;
     return {
-      headerTitle: "Add Event"
+      headerTitle: 'Add Event',
+      headerStyle: {
+        backgroundColor: '#3f91f5',
+      },
+      headerTitleStyle: {
+        color: 'white'
+      },
+      headerLeft:
+        <Icon
+          onPress={()=>navigation.goBack()}
+          size={32}
+          name='chevron-left'
+          containerStyle={{ paddingLeft: 20}}
+          color='white'
+          underlayColor='#3f91f5'/>
     }
   };
 
@@ -66,7 +80,7 @@ export default class LoginForm extends React.Component {
            "title": this.state.title,
            "desc": this.state.desc,
            "edate": this.state.date,
-           "target_fund":"3500",
+           "target_fund": this.state.target_fund,
            "status":"inc",
            "visibleto":"all"
           }

@@ -17,6 +17,7 @@ class Welcome extends React.Component {
     this.state = {
       isAuthenticated: false,
     }
+    this.startTokenRefresh = this.startTokenRefresh.bind(this);
   }
 
   _verify() {
@@ -41,10 +42,30 @@ class Welcome extends React.Component {
     });
   }
 
+  startTokenRefresh() {
+    setInterval(()=> {
+      console.log("verifying token");
+      AsyncStorage.getItem('jwt').then((token)=>{
+
+        axios.post(API_URLS.refresh_token_url, {
+          token: token
+        }).then((res)=> {
+          AsyncStorage.setItem('jwt', token);
+          console.log(res);
+        }).catch((err)=> {
+          console.log('token refresh error');
+        })
+      }).catch((err)=> {
+        console.log('error getting token');
+      });
+    }, 5000);
+  }
+
   componentWillMount() {
     this._verify();
     setTimeout(()=> {
       if (this.state.isAuthenticated) {
+        // this.startTokenRefresh();
         this.props.navigation.navigate("App");
       } else {
         this.props.navigation.navigate("Auth");

@@ -31,7 +31,13 @@ const LeftButton = (props) => {
 export default class Wishlist extends React.Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: 'My Wishlist',
-    headerLeft: <LeftButton nav={navigation}/>
+    headerLeft: <LeftButton nav={navigation}/>,
+    headerStyle: {
+      backgroundColor: '#3f91f5',
+    },
+    headerTitleStyle: {
+      color: 'white'
+    }
   });
 
   constructor(props) {

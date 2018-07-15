@@ -26,9 +26,23 @@ export default class Event extends React.Component {
     return {
       headerTitle: params ? params.props.title : "Event",
       headerRight: <RightButton del={() => {
-        console.log("delete?");
         params.handleDelete();
-      }}/>
+      }}/>,
+      headerStyle: {
+        backgroundColor: '#3f91f5',
+      },
+      headerTitleStyle: {
+        color: 'white'
+      },
+      headerLeft:
+        <Icon
+          onPress={()=>navigation.goBack()}
+          size={32}
+          name='chevron-left'
+          containerStyle={{ paddingLeft: 20}}
+          color='white'
+          underlayColor='#3f91f5'/>
+
     };
   };
 
@@ -90,6 +104,7 @@ export default class Event extends React.Component {
           },
         })
         .then((res) => {
+          console.log(res.data);
           console.log("delete successful");
         })
         .catch((err) => {
