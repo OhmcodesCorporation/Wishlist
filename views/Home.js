@@ -57,7 +57,7 @@ const MyApp = createDrawerNavigator({
         return (
           <Icon
           name='home'
-          color='#3f91f5'
+          color={tintColor}
           underlayColor='#3f91f5'
         />)
       }
@@ -71,7 +71,7 @@ const MyApp = createDrawerNavigator({
         return (
           <Icon
           name='event'
-          color='#3f91f5'
+          color={tintColor}
           underlayColor='#3f91f5'
         />)
       }
@@ -85,7 +85,7 @@ const MyApp = createDrawerNavigator({
         return (
           <Icon
           name='list'
-          color='#3f91f5'
+          color={tintColor}
           underlayColor='#3f91f5'
         />)
       }
@@ -100,7 +100,7 @@ const MyApp = createDrawerNavigator({
           <Icon
             type='font-awesome'
             name='sign-out'
-            color='#3f91f5'
+            color={tintColor}
             underlayColor='#3f91f5'
           />)
       }

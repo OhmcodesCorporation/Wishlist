@@ -80,7 +80,10 @@ export default class Event extends React.Component {
         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
         {text: 'OK', onPress: () => {
           this._delete();
-          this.props.navigation.goBack();
+          this.props.navigation.state.params.reload();
+          setTimeout(()=>{
+            this.props.navigation.goBack()
+          }, 750);
          }
         },
       ]

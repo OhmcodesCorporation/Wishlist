@@ -28,18 +28,28 @@ const RightButton = (props) => {
   />)
 }
 export default class Events extends React.Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: 'My Events',
-    headerLeft: <LeftButton nav={navigation}/>,
-    headerRight: <RightButton nav={navigation}/>,
-    headerStyle: {
-      backgroundColor: '#3f91f5',
-    },
-    headerTitleStyle: {
-      color: 'white'
+  static navigationOptions = ({navigation}) => {
+    const { params } = navigation.state;
+    return {
+      headerTitle: 'My Events',
+      headerLeft: <LeftButton nav={navigation}/>,
+      headerRight: <RightButton nav={navigation} reload={()=> {
+        params.reloadEvents()
+      }}/>,
+      headerStyle: {
+        backgroundColor: '#3f91f5',
+      },
+      headerTitleStyle: {
+        color: 'white'
+      }
     }
 
-  });
+  };
+  componentDidMount() {
+    this.props.navigation.setParams({
+      reloadEvents: this.getEvents
+    })
+  }
   constructor(props) {
     super(props);
     this.state = {

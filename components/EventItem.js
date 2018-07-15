@@ -45,10 +45,11 @@ export default class EventItem extends React.Component {
   render() {
     let { navigate } = this.props.navigation;
     let info = this.state;
+    let reload = this.props.navigation.state.params.reloadEvents;
     return (
       <TouchableOpacity
         style={styles.container}
-        onPress={()=>{navigate('Event', {props: info})}}
+        onPress={()=>{navigate('Event', {props: info, reload: reload})}}
         >
         <Card title={this.state.title}>
           <Text style={styles.info}>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import styled from 'styled-components/native';
 
 import { Icon } from 'react-native-elements';
 import Carousel from 'react-native-snap-carousel';
